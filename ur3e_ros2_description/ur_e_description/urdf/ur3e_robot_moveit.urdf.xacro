@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro"
+       name="ur3e" >
+
+  <!-- common stuff -->
+  <xacro:include filename="$(find ur_e_description)/urdf/common.gazebo.xacro" />
+
+  <!-- ur3e -->
+  <xacro:include filename="$(find ur_e_description)/urdf/ur3e.urdf.xacro" />
+
+  <!-- Include EGH Gripper -->
+  <!-- <xacro:include filename="$(find egh_gripper_description_new)/urdf/egh_gripper.urdf.xacro" /> -->
+
+  <!-- Include RG2 Gripper -->
+  <xacro:include filename="$(find ur_e_description)/urdf/rg2_gripper.urdf.xacro" />
+
+  <!-- Import all available sensors -->
+  <!-- <xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" /> -->
+
+  <!-- arm -->
+  <xacro:ur3e_robot prefix="" joint_limited="false"/>
+
+  <link name="world" />
+
+  <joint name="world_joint" type="fixed">
+    <parent link="world" />
+    <child link = "base_link" />
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+  </joint>
+
+  <!-- Schunk RG2 -->
+  <xacro:rg2_gripper prefix="rg2_gripper" parent="ee_link">
+      <!-- <origin xyz="5.0 5.0 5.0" rpy="0 0 ${pi/2}"/> -->
+  </xacro:rg2_gripper>
+
+  <!-- Intel Realsense -->
+  <!-- <xacro:sensor_r430 prefix="wrist_rgbd" parent="world" prefix_topic="wrist_rgbd">
+  </xacro:sensor_r430> -->
+
+  <material name="light_brown">
+    <color rgba="0.5451 0.2706 0.0745 1"/>
+  </material>
+  <material name="dark_brown">
+    <color rgba="0.6471 0.2706 0.1647 0.5"/>
+  </material>
+
+  <joint name="base_to_table" type="fixed">
+    <parent link="base_link"/>
+    <child link="table"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+
+  <link name="table">
+    <visual>
+      <geometry>
+        <box size="0.04 1.5 0.60"/>
+      </geometry>
+      <material name="dark_brown"/>
+      <origin rpy="0 1.57075 1.57075" xyz="0.67 0.22 -0.025"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.04 1.5 0.60"/>
+      </geometry>
+      <origin rpy="0 1.57075 1.57075" xyz="0.67 0.22 -0.025"/>
+    </collision>
+  </link>
+
+  <joint name="base_to_wall" type="fixed">
+    <parent link="base_link"/>
+    <child link="wall"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+
+  <link name="wall">
+    <visual>
+      <geometry>
+        <box size="0.04 2 3"/>
+      </geometry>
+      <material name="light_brown"/>
+      <origin rpy="0 0 1.57075" xyz="0.43 0.55 0.6"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.04 2 3"/>
+      </geometry>
+      <origin rpy="0 0 1.57075" xyz="0.43 0.55 0.6"/>
+    </collision>
+  </link>
+
+</robot>
